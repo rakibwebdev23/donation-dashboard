@@ -1,9 +1,9 @@
-import Login from "../../pages/Login/Login";
+import SignIn from "../../pages/SignIn/SignIn";
 
 const Root = () => {
     return (
         <div>
-            <Login/>
+            <SignIn></SignIn>
         </div>
     );
 };
