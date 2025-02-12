@@ -26,7 +26,7 @@ const SocialSign = () => {
             <div className="mt-4">
                 <button
                     onClick={handleGoogleSignUser}
-                    className="flex items-center justify-center w-full max-w-xs mx-auto px-6 py-3 bg-slate-900 text-white rounded hover:bg-rose-600 duration-200"
+                    className="flex items-center justify-center w-full max-w-xs mx-auto px-6 py-3 bg-white/80 text-black rounded hover:bg-rose-600 duration-200"
                 >
                     <FaGoogle className="text-xl mr-3 text-blue-600" />
                     <span className="text-sm font-semibold">Sign in with Google</span>
