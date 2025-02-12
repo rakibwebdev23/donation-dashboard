@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "./useAxiosSecure";
 
-const allProjectsData = () => {
+const useProjectsData = () => {
     const axiosSecure = useAxiosSecure();
     const { data: projects = [], refetch } = useQuery({
         queryKey: ["projects"],
@@ -13,4 +13,4 @@ const allProjectsData = () => {
     return [projects, refetch];
 };
 
-export default allProjectsData;
+export default useProjectsData;
