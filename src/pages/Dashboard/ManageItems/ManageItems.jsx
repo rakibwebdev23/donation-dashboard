@@ -12,11 +12,11 @@ const ManageItems = () => {
     const handleDeleteProject = project => {
         Swal.fire({
             title: 'Confirm Deletion',
-            text: 'This action cannot be undone. Are you sure you want to proceed?',
+            text: 'Are you sure you want to proceed?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#DC2626', // Red color
-            cancelButtonColor: '#6B7280', // Gray color
+            confirmButtonColor: '#DC2626',
+            cancelButtonColor: '#6B7280',
             confirmButtonText: 'Delete',
             cancelButtonText: 'Cancel',
             customClass: {
@@ -30,7 +30,7 @@ const ManageItems = () => {
             buttonsStyling: true,
             padding: '2rem',
             background: '#FFFFFF',
-            backdrop: 'rgba(0,0,0,0.4)'
+            backdrop: 'rgba(255, 0, 0, 0.5)'
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const res = await axiosSecure.delete(`/projects/${project._id}`);
