@@ -2,13 +2,60 @@ import { Link } from "react-router-dom";
 import useProjectsData from "../../../hooks/useProjectsData";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const ManageItems = () => {
-    const [projects] = useProjectsData();
+    const [projects, refetch] = useProjectsData();
+    const axiosSecure = useAxiosSecure();
 
-    const handleDeleteProject = id => {
-        console.log(id);
-        
+    const handleDeleteProject = project => {
+        Swal.fire({
+            title: 'Confirm Deletion',
+            text: 'This action cannot be undone. Are you sure you want to proceed?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DC2626', // Red color
+            cancelButtonColor: '#6B7280', // Gray color
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'rounded-lg shadow-xl',
+                title: 'text-xl font-semibold text-gray-800',
+                htmlContainer: 'text-gray-600',
+                confirmButton: 'px-6 py-2.5 rounded-md text-sm font-medium transition-colors',
+                cancelButton: 'px-6 py-2.5 rounded-md text-sm font-medium transition-colors',
+                actions: 'space-x-3'
+            },
+            buttonsStyling: true,
+            padding: '2rem',
+            background: '#FFFFFF',
+            backdrop: 'rgba(0,0,0,0.4)'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await axiosSecure.delete(`/projects/${project._id}`);
+                if (res.data.deletedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        title: 'Deleted Successfully',
+                        text: `${project.category_title} has been removed`,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'rounded-lg shadow-xl',
+                            title: 'text-lg font-medium text-gray-800',
+                            htmlContainer: 'text-gray-600'
+                        },
+                        background: '#FFFFFF',
+                        backdrop: 'rgba(0,0,0,0.4)',
+                        position: 'top-end',
+                        toast: true,
+                        timerProgressBar: true
+                    });
+                }
+            }
+        });
     }
 
     return (
@@ -28,7 +75,7 @@ const ManageItems = () => {
                                 Title
                             </th>
                             <th className="border border-gray-200 px-4 py-2 text-center font-semibold">
-                             Amount
+                                Amount
                             </th>
                             <th className="border border-gray-200 px-4 py-2 text-center font-semibold">
                                 Update
@@ -53,27 +100,29 @@ const ManageItems = () => {
                                                 alt={project.name}
                                                 className="w-full h-full object-cover"
                                             />
-                                            
                                         </div>
                                         {project.category_name}
                                     </div>
                                 </td>
                                 <td className="border border-gray-200 px-4 py-3 text-gray-600 text-center">
-                                {project.category_title}
+                                    {project.category_title}
                                 </td>
                                 <td className="border border-gray-200 px-4 py-3 text-gray-600 text-center">
-                                   $ {project.donate_amount}
+                                    $ {project.donate_amount}
                                 </td>
                                 <td className="border border-gray-200 px-4 py-3 text-center">
                                     <Link to={`/dashboard/updateItem/${project._id}`}>
-                                        <button>
-                                            <FaEdit className="fas fa-edit text-xl text-green-600"></FaEdit>
+                                        <button className="transition-colors hover:text-green-700">
+                                            <FaEdit className="text-xl text-green-600" />
                                         </button>
                                     </Link>
                                 </td>
                                 <td className="border border-gray-200 px-4 py-3 text-center">
-                                    <button onClick={() => handleDeleteProject(_id)}>
-                                        <RiDeleteBin6Line className="fa-solid fa-trash-can text-xl text-red-600"></RiDeleteBin6Line>
+                                    <button 
+                                        onClick={() => handleDeleteProject(project)}
+                                        className="transition-colors hover:text-red-700"
+                                    >
+                                        <RiDeleteBin6Line className="text-xl text-red-600" />
                                     </button>
                                 </td>
                             </tr>
