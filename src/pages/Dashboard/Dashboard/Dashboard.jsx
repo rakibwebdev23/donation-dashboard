@@ -1,11 +1,24 @@
 import { useState } from "react";
 import { FaClipboardList, FaHome, FaPlus } from "react-icons/fa";
 import { MdClose, MdLogout, MdMenu } from "react-icons/md";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { logOut } = useAuth();
+    const navigate = useNavigate();
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+    const handleSignOut = () => {
+        logOut()
+            .then(() => {
+                navigate("/")
+            })
+            .catch((error) => {
+                console.log("Logout failed", error);
+            });
+    };
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
@@ -19,7 +32,7 @@ const Dashboard = () => {
                         <MdClose size={24} />
                     </button>
                 </div>
-                
+
                 <ul className="space-y-4 flex-grow">
                     <li>
                         <NavLink
@@ -53,7 +66,7 @@ const Dashboard = () => {
                     </li>
                 </ul>
             </div>
-            
+
             {/* Main Content */}
             <div className="flex-1 lg:ml-72">
                 {/* Header */}
@@ -61,11 +74,12 @@ const Dashboard = () => {
                     <button onClick={toggleSidebar} className="text-white lg:hidden block">
                         <MdMenu size={28} />
                     </button>
-                    <button className="bg-white text-[#18181B] px-4 py-2 rounded flex items-center font-semibold hover:bg-gray-200 transition-all">
-                        <MdLogout className="mr-2" size={20} /> Logout
+                    <button onClick={handleSignOut} className="bg-white text-[#18181B] px-4 py-2 rounded flex items-center font-semibold hover:bg-gray-200 transition-all">
+                        <MdLogout className="mr-2" size={20} /> Sign Out
                     </button>
+
                 </header>
-                
+
                 {/* Page Content */}
                 <div className="lg:p-10 p-5">
                     <Outlet />
